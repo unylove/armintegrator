@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АРМ Интегратор — Обучающий Портал | Разработчик Радевич А.Р.</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        rail: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            800: '#102a43',
+                            900: '#0b1b2b',
+                            950: '#060e18'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060e18;
+            color: #f0f4f8;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1b2b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a5f;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        .glass-panel {
+            background: rgba(16, 42, 67, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-interactive {
+            background: rgba(16, 42, 67, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.2s ease-in-out;
+        }
+        @media (min-width: 768px) {
+            .glass-panel-interactive:hover {
+                border-color: rgba(6, 182, 212, 0.4);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.15);
+            }
+        }
+
+        #video-container iframe, #video-container video {
+            width: 100% !important;
+            height: 100% !important;
+            border: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+    <!-- Top Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80 bg-rail-950/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                
+                <!-- Brand & Logo -->
+                <div class="flex items-center gap-2.5 sm:gap-3">
+                    <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-700 flex items-center justify-center text-white font-bold text-base sm:text-xl shadow-lg shadow-cyan-500/20 border border-cyan-400/30 shrink-0">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5 sm:gap-2">
+                            <span class="font-extrabold text-base sm:text-xl tracking-wide text-white">АРМ ИНТЕГРАТОР</span>
+                            <span class="bg-cyan-950 text-cyan-400 text-[10px] sm:text-xs px-1.5 py-0.5 rounded border border-cyan-800 font-mono">Alpha</span>
+                        </div>
+                        <p class="text-[10px] sm:text-xs text-slate-400 hidden sm:block">Портал обучения и База Знаний БЛОК</p>
+                    </div>
+                </div>
+
+                <!-- Developer Badge (Hidden on mobile) -->
+                <div class="hidden lg:flex items-center gap-3 bg-rail-900/80 border border-slate-700/60 rounded-full px-4 py-2 shadow-inner">
+                    <div class="relative">
+                        <div class="w-8 h-8 rounded-full bg-cyan-600/30 text-cyan-400 flex items-center justify-center font-bold text-xs border border-cyan-500/50">
+                            РА
+                        </div>
+                        <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-rail-900 rounded-full flex items-center justify-center text-[8px] text-black font-bold">
+                            <i class="fa-solid fa-check"></i>
+                        </span>
+                    </div>
+                    <div class="text-xs">
+                        <div class="text-slate-400 flex items-center gap-1.5">
+                            <span>Разработчик:</span>
+                            <span class="inline-flex items-center text-emerald-400 font-medium text-[10px] bg-emerald-950/60 px-1.5 py-0.2 rounded border border-emerald-800/50">
+                                <i class="fa-solid fa-shield-halved mr-1"></i> Авторский проект
+                            </span>
+                        </div>
+                        <div class="text-white font-semibold flex items-center gap-2">
+                            <span>Радевич А.Р.</span>
+                            <span class="text-slate-500">•</span>
+                            <span class="text-cyan-400 font-mono text-[11px]">Участок ремонта БЛОК</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="flex items-center gap-2">
+                    <a href="#download-section" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium text-xs sm:text-sm px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition duration-200 shadow-lg shadow-cyan-600/20 flex items-center gap-1.5 border border-cyan-400/30">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Скачать</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <div class="bg-gradient-to-r from-cyan-950 via-rail-900 to-slate-900 border-b border-cyan-900/40 py-2 px-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 text-[11px] sm:text-xs text-slate-300">
+            <div class="flex items-center gap-2">
+                <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 font-semibold px-1.5 py-0.5 rounded text-[10px] shrink-0">
+                    <i class="fa-solid fa-circle-info"></i> ВАЖНО
+                </span>
+                <span class="truncate">Официальный ресурс видеопособий и ПО АРМ Интегратор.</span>
+            </div>
+            <div class="text-cyan-400 font-mono text-[10px] sm:text-xs shrink-0 hidden sm:flex items-center gap-1">
+                <i class="fa-solid fa-lock text-emerald-400"></i> Некоммерческий проект
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 space-y-6 sm:space-y-10 flex-1 w-full">
+
+        <!-- Academy Section -->
+        <section id="academy-section" class="space-y-4 sm:space-y-6">
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
+                <div>
+                    <div class="flex items-center gap-1.5 text-cyan-400 text-[11px] sm:text-xs font-mono font-semibold uppercase tracking-wider mb-1">
+                        <i class="fa-solid fa-graduation-cap"></i> Видеоакадемия & Инструкции
+                    </div>
+                    <h1 class="text-xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Обучающие видеопособия БЛОК
+                    </h1>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="video-search" placeholder="Поиск видеоурока..."
+                           class="w-full pl-8 pr-3 py-1.5 sm:py-2 bg-rail-900/90 border border-slate-700 rounded-xl text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
+                </div>
+            </div>
+
+            <!-- Video Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
+
+                <!-- Player Column -->
+                <div class="lg:col-span-8 flex flex-col gap-3 sm:gap-4">
+
+                    <!-- Player Box -->
+                    <div class="relative bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-slate-800 shadow-2xl aspect-video group">
+
+                        <!-- Watermark Overlay Header -->
+                        <div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-20 flex items-center gap-1.5 sm:gap-2 bg-rail-950/80 backdrop-blur-md px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-700/80 text-[10px] sm:text-xs text-slate-200 shadow-md pointer-events-none select-none">
+                            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                            <span class="font-medium text-cyan-300">АРМ Интегратор</span>
+                            <span class="text-slate-500">|</span>
+                            <span class="text-slate-400">Автор: <strong class="text-white">Радевич А.Р.</strong></span>
+                        </div>
+
+                        <!-- Permanent Watermark -->
+                        <div class="absolute inset-0 pointer-events-none z-10 flex items-center justify-center opacity-15 select-none rotate-[-12deg]">
+                            <span class="text-xs sm:text-2xl md:text-4xl font-extrabold uppercase text-slate-300 tracking-widest border-2 sm:border-4 border-slate-300 px-3 py-1 sm:px-6 sm:py-2 rounded-lg sm:rounded-2xl text-center">
+                                РАДЕВИЧ А.Р. • АРМ ИНТЕГРАТОР
+                            </span>
+                        </div>
+
+                        <!-- Frame Container -->
+                        <div id="video-container" class="w-full h-full flex items-center justify-center bg-rail-950 relative z-0">
+                        </div>
+                    </div>
+
+                    <!-- Video Bar Below Player -->
+                    <div class="glass-panel p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-800/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-rail-900/90">
+                        <div>
+                            <div id="player-current-category" class="text-cyan-400 text-[10px] sm:text-xs font-mono font-semibold uppercase tracking-wider">КАТЕГОРИЯ: ПРОШИВКА</div>
+                            <h2 id="player-current-title" class="text-sm sm:text-lg font-bold text-white leading-snug">Выберите видеоурок</h2>
+                        </div>
+                        <div class="shrink-0 text-left sm:text-right">
+                            <span class="text-xs font-mono text-emerald-400 flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Авторский релиз</span>
+                        </div>
+                    </div>
+
+                    <!-- Details Box -->
+                    <div class="glass-panel p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-800/80 space-y-3">
+                        <div class="flex items-center gap-2.5 pb-2.5 border-b border-slate-800">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-cyan-600 to-blue-600 flex items-center justify-center font-bold text-white text-xs shadow-md shrink-0">
+                                РА
+                            </div>
+                            <div>
+                                <h3 class="text-xs sm:text-sm font-bold text-white flex items-center gap-1">
+                                    Артур Радевич
+                                    <i class="fa-solid fa-circle-check text-cyan-400 text-[10px]" title="Автор"></i>
+                                </h3>
+                                <p class="text-[10px] sm:text-xs text-slate-400">Специалист / Разработчик ПО</p>
+                            </div>
+                        </div>
+
+                        <p id="player-current-desc" class="text-xs text-slate-300 leading-relaxed">
+                            Выберите необходимый видеоурок из списка для просмотра.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Playlist Sidebar -->
+                <div class="lg:col-span-4 flex flex-col gap-2.5">
+                    <div class="flex items-center justify-between px-1">
+                        <span class="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-list-ul text-cyan-400"></i> Список видеоуроков (<span id="video-count">0</span>)
+                        </span>
+                    </div>
+
+                    <!-- Scrollable List (Limited height on mobile to prevent endless scroll) -->
+                    <div id="playlist-container" class="space-y-2 max-h-72 sm:max-h-[580px] overflow-y-auto pr-1">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download-section" class="space-y-4 sm:space-y-6 pt-2">
+            <div>
+                <div class="flex items-center gap-1.5 text-cyan-400 text-[11px] sm:text-xs font-mono font-semibold uppercase tracking-wider mb-0.5">
+                    <i class="fa-solid fa-box-archive"></i> Загрузка ПО и материалов
+                </div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Загрузка программы и архива видео</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+
+                <!-- Main Software Card -->
+                <div class="glass-panel-interactive p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-800/80 text-cyan-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </div>
+                            <span class="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold">
+                                <i class="fa-solid fa-check text-[8px] mr-1"></i> Актуальная версия
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-white">АРМ Интегратор v1.0 Alpha</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">
+                                Исполняемый файл комплекса для работы с программами прошивки и диагностики БЛОК.
+                            </p>
+                        </div>
+
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-cyan-400 text-[10px]"></i>
+                                <span>Поддержка утилит диагностики БЛОК</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-cyan-400 text-[10px]"></i>
+                                <span>Автоопределение необходимого ПО</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                        <div class="text-[11px] font-mono text-slate-400">
+                            <div>Размер: ~2.32 МБ</div>
+                        </div>
+
+                        <a href="https://disk.yandex.ru/d/AlxuSRSYyBgFJQ" target="_blank" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs px-4 py-2 rounded-xl transition duration-200 shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> Скачать .EXE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Video Archive Card -->
+                <div class="glass-panel-interactive p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-800 flex flex-col justify-between relative overflow-hidden group">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between">
+                            <div class="w-10 h-10 rounded-xl bg-amber-950 border border-amber-800/80 text-amber-400 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-file-video"></i>
+                            </div>
+                            <span class="bg-amber-950/80 text-amber-300 border border-amber-800 text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold">
+                                ОФЛАЙН-ВИДЕО
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Пакет обучающих видеопособий</h3>
+                            <p class="text-xs text-slate-400 mt-0.5">
+                                Полный архив всех 14 видеоуроков в высоком качестве для просмотра без интернета.
+                            </p>
+                        </div>
+
+                        <ul class="space-y-1.5 text-xs text-slate-300">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-amber-400 text-[10px]"></i>
+                                <span>14 видеоуроков в хорошем качестве</span>
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-amber-400 text-[10px]"></i>
+                                <span>Удобно для работы в КИПе без сети</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                        <div class="text-[11px] font-mono text-slate-400">
+                            <div>Формат: .ZIP архив</div>
+                        </div>
+
+                        <a href="https://cloud.mail.ru/public/5XcM/t2BdH8YLH" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs px-4 py-2 rounded-xl border border-slate-600 transition duration-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-zipper"></i> Скачать Видео
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section class="glass-panel p-4 sm:p-6 rounded-2xl border border-cyan-900/40">
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-600 p-0.5 shrink-0">
+                    <div class="w-full h-full bg-rail-950 rounded-[14px] flex items-center justify-center font-black text-lg text-cyan-400">
+                        РА
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <h3 class="text-base sm:text-lg font-extrabold text-white">Радевич Артур Русланович</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Разработчик АРМ Интегратор. Автоматизация прошивки и диагностики локомотивных систем безопасности (БЛОК).
+                    </p>
+                    <div class="pt-2 flex flex-wrap justify-center sm:justify-start gap-2 text-[11px] font-mono text-cyan-400">
+                        <span><i class="fa-solid fa-building-user mr-1"></i> Участок ремонта БЛОК</span>
+                        <span>•</span>
+                        <span>100% Авторский софт</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-rail-950/80 py-4 mt-8">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 text-center sm:text-left text-[11px] text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                © 2026 <strong class="text-slate-300">АРМ Интегратор</strong>. Автор: <span class="text-cyan-400">Радевич А.Р.</span>
+            </div>
+            <div>
+                Участок ремонта приборов безопасности • Система БЛОК
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Database of Videos
+        const initialVideos = [
+            {
+                id: 'vid-1',
+                title: 'Прошивка модуля БС-СН',
+                category: 'Прошивка',
+                duration: '02:56',
+                desc: 'Подробная инструкция по прошивке модуля БС-СН, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vk.ru/video_ext.php?oid=-241791798&id=456239017&hash=3598f539a18d6320" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-2',
+                title: 'Прошивка ячейки ЭК-СНС-03',
+                category: 'Прошивка',
+                duration: '02:00',
+                desc: 'Подробная инструкция по прошивке ячейки ЭК-СНС-03, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239029&hash=a665430f89d64e11" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-3',
+                title: 'Прошивка ячейки ВДС',
+                category: 'Прошивка',
+                duration: '02:56',
+                desc: 'Подробная инструкция по прошивке ячейки ВДС, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239025&hash=872c312baf0afd01" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-4',
+                title: 'Прошивка ячейки ЭК-СН-01',
+                category: 'Прошивка',
+                duration: '01:26',
+                desc: 'Подробная инструкция по прошивке ячейки ЭК-СН-01, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239022&hash=ba285643dbdf8235" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-5',
+                title: 'Прошивка ячейки ВС-САУТ',
+                category: 'Прошивка',
+                duration: '04:05',
+                desc: 'Подробная инструкция по прошивке ячейки ВС-САУТ, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239027&hash=520dd2afdf3495e1" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-6',
+                title: 'Прошивка модуля БИЛ-ИП',
+                category: 'Прошивка',
+                duration: '02:57',
+                desc: 'Подробная инструкция по прошивке модуля БИЛ-ИП, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239018&hash=4eea057b6d99276d" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-7',
+                title: 'Прошивка модуля Ввода',
+                category: 'Прошивка',
+                duration: '02:15',
+                desc: 'Подробная инструкция по прошивке модуля Ввода, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239023&hash=ae5f7b4c44f6490e" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-8',
+                title: 'Прошивка ячейки ПТК',
+                category: 'Прошивка',
+                duration: '02:11',
+                desc: 'Подробная инструкция по прошивке ячейки ПТК, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239021&hash=0df07c7ff0e0cb8f" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-9',
+                title: 'Прошивка ячейки ЦО',
+                category: 'Прошивка',
+                duration: '08:30',
+                desc: 'Подробная инструкция по прошивке ячейки ЦО, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239026&hash=5aa81a21647e8b81" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-10',
+                title: 'Прошивка модуля БС-ДПС',
+                category: 'Прошивка',
+                duration: '04:30',
+                desc: 'Подробная инструкция по прошивке модуля БС-ДПС, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239028&hash=ff2c907ac9dd2460" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-11',
+                title: 'Прошивка ячейки РС-АЛСН',
+                category: 'Прошивка',
+                duration: '01:01',
+                desc: 'Подробная инструкция по прошивке ячейки РС-АЛСН, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239030&hash=5bee7f368bb9bdff" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-12',
+                title: 'Прошивка модуля Монитор 7.1',
+                category: 'Прошивка',
+                duration: '02:20',
+                desc: 'Подробная инструкция по прошивке модуля Монитор 7.1, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239020&hash=ffd87c4395d2d9b3" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-13',
+                title: 'Прошивка ячейки Вывод',
+                category: 'Прошивка',
+                duration: '01:58',
+                desc: 'Подробная инструкция по прошивке ячейки Вывод, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239024&hash=a55f120cb40ed06c" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            },
+            {
+                id: 'vid-14',
+                title: 'Прошивка модуля МСС',
+                category: 'Прошивка',
+                duration: '02:42',
+                desc: 'Подробная инструкция по прошивке модуля МСС, включая подготовку оборудования и подключение.',
+                videoUrl: '<iframe src="https://vkvideo.ru/video_ext.php?oid=-241791798&id=456239019&hash=5d8d266ff5f8c1d9" width="100%" height="100%" frameborder="0" allowfullscreen="1" style="background-color: #000" allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>'
+            }
+        ];
+
+        let currentVideos = [...initialVideos];
+        let activeVideoId = 'vid-1';
+
+        window.onload = function () {
+            renderPlaylist(currentVideos);
+            loadVideo(currentVideos[0]);
+
+            document.getElementById('video-search').addEventListener('input', function (e) {
+                const query = e.target.value.toLowerCase();
+                const filtered = currentVideos.filter(v =>
+                    v.title.toLowerCase().includes(query) ||
+                    v.category.toLowerCase().includes(query) ||
+                    v.desc.toLowerCase().includes(query)
+                );
+                renderPlaylist(filtered);
+            });
+        };
+
+        function renderPlaylist(videos) {
+            const container = document.getElementById('playlist-container');
+            document.getElementById('video-count').innerText = videos.length;
+
+            if (videos.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6 text-slate-500 text-xs">
+                        <i class="fa-solid fa-film text-xl mb-1 block"></i>
+                        Видео не найдено
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = videos.map(video => {
+                const isActive = video.id === activeVideoId;
+                return `
+                    <div onclick="selectVideo('${video.id}')"
+                         class="p-2.5 sm:p-3 rounded-xl cursor-pointer transition border flex flex-col gap-1.5 ${
+                            isActive
+                                ? 'bg-cyan-950/80 border-cyan-500/80 text-white'
+                                : 'bg-rail-900/60 hover:bg-rail-800/80 border-slate-800 text-slate-300'
+                         }">
+
+                        <div class="flex items-center justify-between gap-2">
+                            <span class="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded ${
+                                isActive ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-cyan-400'
+                            }">
+                                ${video.category}
+                            </span>
+                            <span class="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+                                <i class="fa-regular fa-clock text-[9px]"></i> ${video.duration}
+                            </span>
+                        </div>
+
+                        <h4 class="text-xs font-bold leading-snug">
+                            ${video.title}
+                        </h4>
+
+                        <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t ${isActive ? 'border-cyan-900' : 'border-slate-800/60'}">
+                            <span class="text-emerald-400 font-mono text-[9px]">
+                                Автор: Радевич А.Р.
+                            </span>
+                            <span class="${isActive ? 'text-cyan-300 font-bold' : 'text-slate-500'}">
+                                ${isActive ? 'Играет ▶' : 'Смотреть'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectVideo(id) {
+            activeVideoId = id;
+            const video = currentVideos.find(v => v.id === id);
+            if (video) {
+                loadVideo(video);
+                renderPlaylist(currentVideos);
+            }
+        }
+
+        function loadVideo(video) {
+            document.getElementById('player-current-category').innerText = `КАТЕГОРИЯ: ${video.category.toUpperCase()}`;
+            document.getElementById('player-current-title').innerText = video.title;
+            document.getElementById('player-current-desc').innerText = video.desc;
+
+            const playerContainer = document.getElementById('video-container');
+            if (video.videoUrl && video.videoUrl.trim() !== '') {
+                playerContainer.innerHTML = video.videoUrl;
+            }
+        }
+    </script>
+</body>
+</html>
